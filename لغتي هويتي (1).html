@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لغتي هويتي</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#f3ebdd;--surface:#fbf7ef;--ink:#3b2a20;--muted:#7a6857;--line:#e2d5bf;--gold:#8b5e34;--gold-soft:#ecdcc0;--navy:#4a3426;--navy2:#6a4a35;--red:#a63d2f;--green:#5f7a45;--blue:#6b7f8a;--violet:#8a6a7a;--shadow:0 6px 24px rgba(74,52,38,.14)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1511;--surface:#28201a;--ink:#f1e8da;--muted:#b3a28d;--line:#3b2f26;--gold:#d9a86c;--gold-soft:#43331f;--navy:#140f0c;--navy2:#2e241d;--shadow:0 6px 24px rgba(0,0,0,.45)}}
+:root[data-theme="dark"]{--bg:#1c1511;--surface:#28201a;--ink:#f1e8da;--muted:#b3a28d;--line:#3b2f26;--gold:#d9a86c;--gold-soft:#43331f;--navy:#140f0c;--navy2:#2e241d;--shadow:0 6px 24px rgba(0,0,0,.45)}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;line-height:1.7}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+h1,h2,h3{font-family:'Amiri',serif;line-height:1.3}
+
+/* Login */
+#login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.login-art{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#fff;display:flex;flex-direction:column;justify-content:center;padding:48px;position:relative;overflow:hidden}
+.login-art .big{font-family:'Amiri',serif;font-size:clamp(90px,16vw,220px);line-height:1;color:#e8c999;opacity:.9}
+.login-art h1{font-size:clamp(32px,4vw,52px);margin-top:12px}
+.login-art p{max-width:34ch;opacity:.8;margin-top:10px}
+.login-form{display:flex;align-items:center;justify-content:center;padding:32px}
+.login-box{width:100%;max-width:380px}
+.login-box h2{font-size:30px;margin-bottom:6px}
+.login-box>p{color:var(--muted);margin-bottom:24px}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface)}
+.field input:focus,.field select:focus{border-color:var(--gold)}
+.btn{padding:11px 20px;border:0;border-radius:10px;font-weight:700;background:var(--navy);color:#fff;transition:filter .15s}
+.btn:hover{filter:brightness(1.2)}
+.btn.gold{background:var(--gold);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.block{width:100%}
+.err{background:#fdecea;color:var(--red);padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:14px;display:none}
+.hint{font-size:13px;color:var(--muted);margin-top:14px}
+
+/* App shell */
+#app{display:none;min-height:100vh}
+.side{position:fixed;top:0;bottom:0;right:0;width:250px;background:var(--navy);color:#fff;display:flex;flex-direction:column;padding:22px 14px;z-index:50}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Amiri',serif;font-size:24px;color:#e8c999;padding:0 8px 22px}
+.brand b{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:#e8c999;color:#4a3426;font-size:24px}
+.nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.nav button{display:flex;align-items:center;gap:12px;padding:11px 14px;border:0;border-radius:10px;background:transparent;color:rgba(255,255,255,.72);text-align:right;font-weight:600}
+.nav button:hover{background:rgba(255,255,255,.07)}
+.nav button.active{background:var(--gold-soft);color:var(--navy)}
+:root[data-theme="dark"] .nav button.active{color:var(--gold)}
+.side-foot{display:flex;flex-direction:column;gap:8px;border-top:1px solid rgba(255,255,255,.12);padding-top:14px}
+.side-foot .btn{background:rgba(255,255,255,.08);font-size:14px}
+.who{font-size:13px;opacity:.75;padding:0 6px;overflow:hidden;text-overflow:ellipsis}
+.main{margin-right:250px;padding:32px clamp(16px,3vw,40px) 48px;max-width:1280px}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.top h1{font-size:clamp(26px,4vw,36px)}
+.top p{color:var(--muted)}
+.page{display:none}.page.active{display:block}
+
+/* Stats + dashboard */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:24px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.stat strong{display:block;font-family:'Amiri',serif;font-size:38px;line-height:1.1}
+.stat span{color:var(--muted);font-size:14px}
+.stat.hero{background:var(--navy);color:#fff;border-color:var(--navy)}
+.stat.hero span{color:rgba(255,255,255,.7)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.panel h3{font-size:20px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.row{display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}
+.row .ic{font-size:20px}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block;font-weight:600}
+.row .t small{color:var(--muted)}
+.empty{padding:28px 20px;text-align:center;color:var(--muted)}
+
+/* Library */
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.tools input{flex:1;min-width:200px;padding:11px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.chip{padding:6px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--surface);font-size:14px;font-weight:600}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s}
+.card:hover{box-shadow:var(--shadow)}
+.thumb{height:110px;display:grid;place-items:center;font-size:44px;background:linear-gradient(135deg,var(--navy),var(--navy2))}
+.card .body{padding:16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h4{font-size:16px;line-height:1.5}
+.card p{color:var(--muted);font-size:14px}
+.badge{align-self:flex-start;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700;background:var(--gold-soft);color:var(--gold)}
+.badge.grammar{background:rgba(22,121,76,.12);color:var(--green)}
+.badge.rhetoric{background:rgba(31,95,168,.12);color:var(--blue)}
+.badge.skills,.badge.literature{background:rgba(105,65,198,.12);color:var(--violet)}
+.badge.pdf{background:rgba(180,35,24,.12);color:var(--red)}
+.acts{display:flex;gap:8px;margin-top:auto;padding-top:10px}
+.acts .btn{flex:1;padding:8px;font-size:14px}
+.acts .btn.del{flex:0 0 44px;background:rgba(180,35,24,.1);color:var(--red)}
+
+/* Users */
+.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th{background:var(--navy);color:#fff;text-align:right;padding:12px 16px;font-size:14px}
+td{padding:12px 16px;border-bottom:1px solid var(--line);font-size:14px}
+tr:last-child td{border:0}
+.av{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--gold);color:#fff;font-weight:700;margin-left:10px;vertical-align:middle}
+
+/* Settings */
+.set-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.set-grid .panel>div{padding:18px 20px}
+
+/* Modal + toast */
+.modal{position:fixed;inset:0;background:rgba(10,17,32,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:200}
+.modal.open{display:flex}
+.sheet{background:var(--surface);border-radius:18px;padding:26px;width:100%;max-width:480px;max-height:90vh;overflow:auto}
+.sheet h3{font-size:24px;margin-bottom:16px}
+.sheet .foot{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
+.toast{position:fixed;bottom:calc(86px + env(safe-area-inset-bottom,0px));left:50%;transform:translate(-50%,30px);opacity:0;background:var(--navy);color:#fff;padding:10px 22px;border-radius:99px;font-weight:600;transition:.25s;z-index:300;pointer-events:none}
+.toast.show{transform:translate(-50%,0);opacity:1}
+.toast.err{background:var(--red)}.toast.ok{background:var(--green)}
+
+.fab{position:fixed;left:24px;bottom:calc(24px + env(safe-area-inset-bottom,0px));display:none;align-items:center;gap:8px;padding:14px 22px;border:0;border-radius:99px;background:var(--gold);color:#fff;font-weight:700;box-shadow:var(--shadow);z-index:60}
+.fab b{font-size:22px;line-height:1}
+.sub{font-size:12px;color:var(--muted);margin-top:4px}
+/* Tablet + mobile */
+@media(max-width:900px){
+ .fab{left:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+ .side{top:auto;bottom:0;right:0;left:0;width:auto;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(255,255,255,.1)}
+ .brand,.side-foot .who{display:none}
+ .nav{flex-direction:row;justify-content:space-around}
+ .nav button{flex-direction:column;gap:0;padding:6px 8px;font-size:11px;text-align:center;flex:1}
+ .nav button span.i{font-size:20px}
+ .side-foot{border:0;padding:0;flex-direction:row}
+ .side-foot .btn{padding:6px 10px}
+ .main{margin-right:0;padding-bottom:110px}
+ #login{grid-template-columns:1fr}
+ .login-art{padding:28px 24px;min-height:200px}
+ .login-art .big{font-size:80px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<section id="login">
+ <div class="login-art">
+  <div class="big">ض</div>
+  <h1>لغتي هويتي</h1>
+  <p>فيديوهات وكتب لتعلّم اللغة العربية، في مكان واحد.</p>
+ </div>
+ <div class="login-form">
+  <div class="login-box">
+   <h2>تسجيل الدخول</h2>
+   <p>ادخل بحسابك للوصول للمكتبة.</p>
+   <div class="err" id="err"></div>
+   <div class="field"><label for="em">البريد الإلكتروني</label><input id="em" type="email" placeholder="name@email.com" autocomplete="email"></div>
+   <div class="field"><label for="pw">كلمة المرور</label><input id="pw" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+   <button class="btn gold block" onclick="login()">دخول</button>
+   <p class="hint">تسجيل الدخول هنا للعرض فقط، وليس حماية حقيقية للمحتوى.</p>
+  </div>
+ </div>
+</section>
+
+<div id="app">
+ <aside class="side">
+  <div class="brand"><b>ض</b>لغتي هويتي</div>
+  <nav class="nav" id="nav">
+   <button data-p="dashboard" class="active" data-admin><span class="i">🏠</span> الرئيسية</button>
+   <button data-p="videos"><span class="i">🎬</span> الفيديوهات</button>
+   <button data-p="books"><span class="i">📚</span> الكتب</button>
+   <button data-p="users" data-admin><span class="i">👥</span> المستخدمون</button>
+   <button data-p="settings" data-admin><span class="i">⚙️</span> الإعدادات</button>
+  </nav>
+  <div class="side-foot">
+   <div class="who" id="who"></div>
+   <button class="btn" onclick="toggleTheme()" aria-label="تبديل الوضع">🌓</button>
+   <button class="btn" onclick="logout()">خروج</button>
+  </div>
+ </aside>
+
+ <main class="main">
+  <section class="page active" id="p-dashboard">
+   <div class="top"><div><h1>أهلاً بك</h1><p>نظرة سريعة على المنصة</p></div></div>
+   <div class="stats">
+    <div class="stat hero"><strong id="s-v">0</strong><span>فيديو</span></div>
+    <div class="stat"><strong id="s-b">0</strong><span>كتاب وملف</span></div>
+    <div class="stat"><strong id="s-u">0</strong><span>مستخدم</span></div>
+   </div>
+   <div class="panel"><h3>أحدث الإضافات</h3><div id="recent"></div></div>
+  </section>
+
+  <section class="page" id="p-videos">
+   <div class="top"><div><h1>الفيديوهات</h1><p>شروحات اللغة العربية</p></div><button class="btn gold admin-only" onclick="openM('m-video')">+ إضافة فيديو</button></div>
+   <div class="tools"><input id="q-v" type="search" placeholder="ابحث في الفيديوهات…" oninput="renderVideos()"></div>
+   <div class="chips" id="chips"></div>
+   <div class="grid" id="g-v"></div>
+  </section>
+
+  <section class="page" id="p-books">
+   <div class="top"><div><h1>الكتب والملفات</h1><p>كتب وملفات PDF للطلاب</p></div><button class="btn gold admin-only" onclick="openM('m-book')">+ إضافة كتاب</button></div>
+   <div class="tools"><input id="q-b" type="search" placeholder="ابحث في الكتب…" oninput="renderBooks()"></div>
+   <div class="grid" id="g-b"></div>
+  </section>
+
+  <section class="page" id="p-users">
+   <div class="top"><div><h1>المستخدمون</h1><p>إدارة الحسابات</p></div><button class="btn gold" onclick="openM('m-user')">+ إضافة مستخدم</button></div>
+   <div class="table-wrap"><table><thead><tr><th>الاسم</th><th>البريد</th><th>الدور</th><th></th></tr></thead><tbody id="tb-u"></tbody></table></div>
+  </section>
+
+  <section class="page" id="p-settings">
+   <div class="top"><div><h1>الإعدادات</h1><p>بيانات المنصة</p></div></div>
+   <div class="set-grid">
+    <div class="panel"><h3>معلومات المنصة</h3><div>
+     <div class="field"><label>اسم المنصة</label><input id="st-name"></div>
+     <div class="field"><label>الوصف</label><textarea id="st-desc" rows="3"></textarea></div>
+     <button class="btn" onclick="saveSettings()">حفظ التغييرات</button>
+    </div></div>
+    <div class="panel"><h3>بياناتك</h3><div>
+     <p style="color:var(--muted);margin-bottom:12px">البيانات محفوظة في هذا المتصفح فقط.</p>
+     <button class="btn ghost" onclick="resetData()">إعادة البيانات الأصلية</button>
+    </div></div>
+   </div>
+  </section>
+ </main>
+</div>
+
+<div class="modal" id="m-video"><div class="sheet"><h3>إضافة فيديو</h3>
+ <div class="field"><label>العنوان *</label><input id="v-t"></div>
+ <div class="field"><label>المقدّم</label><input id="v-a"></div>
+ <div class="field"><label>رابط الفيديو *</label><input id="v-u" type="url" placeholder="https://"><div class="sub">الصقي رابط Google Drive أو YouTube، وخلي المشاركة «أي شخص معه الرابط».</div></div>
+ <div class="field"><label>التصنيف</label><select id="v-c"><option value="grammar">نحو وصرف</option><option value="rhetoric">بلاغة</option><option value="skills">مهارات لغوية</option><option value="literature">أدب</option></select></div>
+ <div class="foot"><button class="btn ghost" onclick="closeM('m-video')">إلغاء</button><button class="btn" onclick="addVideo()">إضافة الفيديو</button></div>
+</div></div>
+
+<div class="modal" id="m-book"><div class="sheet"><h3>إضافة كتاب أو ملف</h3>
+ <div class="field"><label>الاسم *</label><input id="b-t"></div>
+ <div class="field"><label>المؤلف</label><input id="b-a"></div>
+ <div class="field"><label>النوع</label><select id="b-ty"><option value="book">كتاب</option><option value="pdf">PDF</option></select></div>
+ <div class="field"><label>رابط الملف *</label><input id="b-u" type="url" placeholder="https://"><div class="sub">ارفعي الملف على Google Drive وانسخي رابط المشاركة هنا.</div></div>
+ <div class="foot"><button class="btn ghost" onclick="closeM('m-book')">إلغاء</button><button class="btn" onclick="addBook()">إضافة</button></div>
+</div></div>
+
+<div class="modal" id="m-user"><div class="sheet"><h3>إضافة مستخدم</h3>
+ <div class="field"><label>الاسم *</label><input id="u-n"></div>
+ <div class="field"><label>البريد *</label><input id="u-e" type="email"></div>
+ <div class="field"><label>الدور</label><select id="u-r"><option value="user">طالب</option><option value="admin">مدير</option></select></div>
+ <div class="foot"><button class="btn ghost" onclick="closeM('m-user')">إلغاء</button><button class="btn" onclick="addUser()">إضافة المستخدم</button></div>
+</div></div>
+
+<button class="fab" id="fab" onclick="fabAdd()"><b>+</b><span id="fab-t">إضافة</span></button>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+var ADMIN='beshosolmian@gmail.com',KEY='lughati-v2',isAdmin=false,cat='all',cur='dashboard';
+function fabAdd(){openM({videos:'m-video',books:'m-book',users:'m-user'}[cur])}
+var CATS={grammar:'نحو وصرف',rhetoric:'بلاغة',skills:'مهارات لغوية',literature:'أدب'};
+var ICONS={grammar:'🎬',rhetoric:'✍️',skills:'🎙️',literature:'📜'};
+var DEF={
+ videos:[{id:1,title:'مقدمة في النحو العربي',author:'أستاذ بيشوى',cat:'grammar',url:'https://drive.google.com/file/d/1rS5gS8XjIIyRhQEJCI2HcPhg6ze1pwy_/view?usp=drive_link'}],
+ books:[{id:1,title:'قواعد اللغة العربية الميسرة',author:'ابن هشام الأنصاري',type:'book',url:''}],
+ users:[{id:1,name:'بيشوى سليمان',email:ADMIN,role:'admin'}],
+ settings:{name:'لغتي هويتي',desc:'منصة تعليمية متكاملة للغة العربية'}
+};
+var D=load();
+function load(){try{var s=localStorage.getItem(KEY);if(s)return JSON.parse(s)}catch(e){}return JSON.parse(JSON.stringify(DEF))}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}}
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function safeUrl(u){return /^https?:\/\//i.test(u)?u:''}
+
+/* auth */
+function login(){
+ var e=$('em').value.trim().toLowerCase(),p=$('pw').value,er=$('err');
+ if(!e||!p){er.textContent='اكتب البريد الإلكتروني وكلمة المرور.';er.style.display='block';return}
+ er.style.display='none';isAdmin=(e===ADMIN);
+ $('login').style.display='none';$('app').style.display='block';
+ $('who').textContent=e;
+ document.querySelectorAll('[data-admin]').forEach(function(b){b.style.display=isAdmin?'':'none'});
+ document.querySelectorAll('.admin-only').forEach(function(b){b.style.display=isAdmin?'':'none'});
+ renderAll();go(isAdmin?'dashboard':'videos');
+}
+function logout(){$('app').style.display='none';$('login').style.display='';$('em').value='';$('pw').value=''}
+$('pw').addEventListener('keydown',function(e){if(e.key==='Enter')login()});
+
+/* nav */
+function go(p){
+ document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active')});
+ $('p-'+p).classList.add('active');
+ cur=p;var F={videos:'فيديو',books:'كتاب أو ملف',users:'مستخدم'};$('fab').style.display=(isAdmin&&F[p])?'flex':'none';if(F[p])$('fab-t').textContent='إضافة '+F[p];
+ document.querySelectorAll('#nav button').forEach(function(b){b.classList.toggle('active',b.dataset.p===p)});
+ window.scrollTo(0,0);
+}
+$('nav').addEventListener('click',function(e){var b=e.target.closest('button');if(b)go(b.dataset.p)});
+
+/* theme */
+function toggleTheme(){
+ var r=document.documentElement,dark=r.dataset.theme==='dark'||(!r.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);
+ r.dataset.theme=dark?'light':'dark';
+}
+
+/* render */
+function renderAll(){renderChips();renderVideos();renderBooks();renderUsers();renderStats();renderSettings()}
+function renderChips(){
+ var h='<button class="chip'+(cat==='all'?' on':'')+'" data-c="all">الكل</button>';
+ for(var k in CATS)h+='<button class="chip'+(cat===k?' on':'')+'" data-c="'+k+'">'+CATS[k]+'</button>';
+ $('chips').innerHTML=h;
+}
+$('chips').addEventListener('click',function(e){var b=e.target.closest('.chip');if(!b)return;cat=b.dataset.c;renderChips();renderVideos()});
+function card(icon,badgeCls,badge,title,sub,openFn,delFn,id,openLbl){
+ return '<article class="card"><div class="thumb">'+icon+'</div><div class="body"><span class="badge '+badgeCls+'">'+badge+'</span><h4>'+esc(title)+'</h4><p>'+esc(sub)+'</p><div class="acts"><button class="btn" onclick="'+openFn+'('+id+')">'+openLbl+'</button>'+(isAdmin?'<button class="btn del" aria-label="حذف" onclick="'+delFn+'('+id+')">🗑</button>':'')+'</div></div></article>';
+}
+function renderVideos(){
+ var q=$('q-v').value.trim(),list=D.videos.filter(function(v){return(cat==='all'||v.cat===cat)&&(!q||(v.title+v.author).indexOf(q)>-1)});
+ $('g-v').innerHTML=list.length?list.map(function(v){return card(ICONS[v.cat]||'🎬',v.cat,CATS[v.cat]||'',v.title,v.author,'openV','delV',v.id,'▶ مشاهدة')}).join(''):'<div class="empty" style="grid-column:1/-1">لا توجد فيديوهات مطابقة.</div>';
+}
+function renderBooks(){
+ var q=$('q-b').value.trim(),list=D.books.filter(function(b){return!q||(b.title+b.author).indexOf(q)>-1});
+ $('g-b').innerHTML=list.length?list.map(function(b){return card(b.type==='pdf'?'📕':'📗',b.type==='pdf'?'pdf':'',b.type==='pdf'?'PDF':'كتاب',b.title,b.author,'openB','delB',b.id,'📖 فتح')}).join(''):'<div class="empty" style="grid-column:1/-1">لا توجد كتب مطابقة.</div>';
+}
+function renderUsers(){
+ $('tb-u').innerHTML=D.users.map(function(u){return'<tr><td><span class="av">'+esc(u.name[0])+'</span>'+esc(u.name)+'</td><td>'+esc(u.email)+'</td><td>'+(u.role==='admin'?'مدير':'طالب')+'</td><td><button class="btn ghost" style="padding:5px 12px" onclick="delU('+u.id+')">حذف</button></td></tr>'}).join('');
+}
+function renderStats(){
+ $('s-v').textContent=D.videos.length;$('s-b').textContent=D.books.length;$('s-u').textContent=D.users.length;
+ var r=D.videos.slice(-3).reverse().map(function(v){return'<div class="row"><span class="ic">🎬</span><div class="t"><b>'+esc(v.title)+'</b><small>'+esc(v.author)+'</small></div></div>'}).join('')+D.books.slice(-2).reverse().map(function(b){return'<div class="row"><span class="ic">📗</span><div class="t"><b>'+esc(b.title)+'</b><small>'+esc(b.author)+'</small></div></div>'}).join('');
+ $('recent').innerHTML=r||'<div class="empty">ابدأ بإضافة أول فيديو.</div>';
+}
+function renderSettings(){$('st-name').value=D.settings.name;$('st-desc').value=D.settings.desc}
+function saveSettings(){D.settings={name:$('st-name').value.trim()||DEF.settings.name,desc:$('st-desc').value.trim()};save();toast('تم حفظ التغييرات','ok')}
+function resetData(){if(!confirm('هترجع كل البيانات للوضع الأصلي. متأكد؟'))return;D=JSON.parse(JSON.stringify(DEF));save();renderAll();toast('تمت إعادة البيانات','ok')}
+
+/* open / add / delete */
+function openV(id){var v=D.videos.find(function(x){return x.id===id}),u=v&&safeUrl(v.url);u?window.open(u,'_blank','noopener'):toast('لا يوجد رابط لهذا الفيديو','err')}
+function openB(id){var b=D.books.find(function(x){return x.id===id}),u=b&&safeUrl(b.url);u?window.open(u,'_blank','noopener'):toast('لا يوجد رابط لهذا الملف','err')}
+function addVideo(){if(!isAdmin)return;
+ var t=$('v-t').value.trim(),u=$('v-u').value.trim();
+ if(!t)return toast('اكتب عنوان الفيديو','err');
+ if(!safeUrl(u))return toast('اكتب رابطاً صحيحاً يبدأ بـ https','err');
+ D.videos.push({id:Date.now(),title:t,author:$('v-a').value.trim()||'غير محدد',cat:$('v-c').value,url:u});
+ save();closeM('m-video');['v-t','v-a','v-u'].forEach(function(i){$(i).value=''});renderVideos();renderStats();toast('تمت إضافة الفيديو','ok');
+}
+function addBook(){if(!isAdmin)return;
+ var t=$('b-t').value.trim(),u=$('b-u').value.trim();
+ if(!t)return toast('اكتب اسم الكتاب','err');
+ if(!safeUrl(u))return toast('اكتب رابطاً صحيحاً يبدأ بـ https','err');
+ D.books.push({id:Date.now(),title:t,author:$('b-a').value.trim()||'غير محدد',type:$('b-ty').value,url:u});
+ save();closeM('m-book');['b-t','b-a','b-u'].forEach(function(i){$(i).value=''});renderBooks();renderStats();toast('تمت إضافة الكتاب','ok');
+}
+function addUser(){if(!isAdmin)return;
+ var n=$('u-n').value.trim(),e=$('u-e').value.trim();
+ if(!n||!e)return toast('اكتب الاسم والبريد','err');
+ D.users.push({id:Date.now(),name:n,email:e,role:$('u-r').value});
+ save();closeM('m-user');$('u-n').value='';$('u-e').value='';renderUsers();renderStats();toast('تمت إضافة المستخدم','ok');
+}
+function delV(id){if(!isAdmin)return;if(!confirm('حذف هذا الفيديو؟'))return;D.videos=D.videos.filter(function(x){return x.id!==id});save();renderVideos();renderStats();toast('تم الحذف','ok')}
+function delB(id){if(!isAdmin)return;if(!confirm('حذف هذا الكتاب؟'))return;D.books=D.books.filter(function(x){return x.id!==id});save();renderBooks();renderStats();toast('تم الحذف','ok')}
+function delU(id){if(!isAdmin)return;if(!confirm('حذف هذا المستخدم؟'))return;D.users=D.users.filter(function(x){return x.id!==id});save();renderUsers();renderStats();toast('تم الحذف','ok')}
+
+/* modal + toast */
+function openM(id){$(id).classList.add('open')}
+function closeM(id){$(id).classList.remove('open')}
+document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open')})});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(function(m){m.classList.remove('open')})});
+var tt;function toast(m,t){var el=$('toast');el.textContent=m;el.className='toast show '+(t||'');clearTimeout(tt);tt=setTimeout(function(){el.classList.remove('show')},2600)}
+</script>
+</body>
+</html>
